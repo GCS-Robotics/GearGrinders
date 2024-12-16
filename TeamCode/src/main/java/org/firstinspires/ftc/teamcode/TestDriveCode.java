@@ -14,11 +14,11 @@ public class TestDriveCode extends LinearOpMode {
     DcMotor leftRear; //port 1 Gobilda 5202/3/4
     DcMotor rightFront; //port 2 Gobilda 5202/3/4
     DcMotor rightRear; //port 3 Gobilda 5202/3/4
-    DcMotor linearSlide; //port 0 Gobila ???
     DcMotor armMotor; //port 1 Gobilda ???
 
     // Define Servos Here
     CRServo claw; //port 0 Continuous Servo
+    CRServo wrist;
     @Override
     public void runOpMode() throws InterruptedException {
         // On Init (Hardwaremap Motors Here)
@@ -26,8 +26,9 @@ public class TestDriveCode extends LinearOpMode {
         leftRear=hardwareMap.dcMotor.get("motor2");
         rightFront=hardwareMap.dcMotor.get("motor3");
         rightRear=hardwareMap.dcMotor.get("motor4");
-        linearSlide=hardwareMap.dcMotor.get("motor5");
-        armMotor=hardwareMap.dcMotor.get("motor6");
+        armMotor=hardwareMap.dcMotor.get("motor5");
+        claw=hardwareMap.crservo.get("servo1");
+        wrist=hardwareMap.crservo.get("servo2");
         waitForStart();
         // On Play
         while(opModeIsActive()) {
@@ -185,33 +186,17 @@ public class TestDriveCode extends LinearOpMode {
                 rightRear.setPower(0);
             }
 
-            // LINEAR SLIDE
-
-            // Up
-            if(gamepad2.left_stick_y<-0.75){
-                linearSlide.setPower(1);
-            }
-
-            // Down
-            if(gamepad2.left_stick_y>0.75){
-                linearSlide.setPower(-1);
-            }
-
-            // Stop
-            else {
-                linearSlide.setPower(0);
-            }
 
             // CLAW
 
             // Open
-            if(gamepad2.right_stick_y<-0.75){
+            if(gamepad2.x){
                 claw.setDirection(CRServo.Direction.FORWARD);
                 claw.setPower(1);
             }
 
             // Close
-            if(gamepad2.right_stick_y<-0.75){
+            else if(gamepad2.y){
                 claw.setDirection(CRServo.Direction.REVERSE);
                 claw.setPower(1);
             }
@@ -229,13 +214,32 @@ public class TestDriveCode extends LinearOpMode {
             }
 
             // Down
-            if(gamepad2.left_stick_y<-0.75){
+            else if(gamepad2.left_stick_y> 0.75){
                 armMotor.setPower(-1);
             }
 
             // Stop
             else {
                 armMotor.setPower(0);
+            }
+
+            // WRIST
+
+            // Open
+            if(gamepad2.a){
+                wrist.setDirection(CRServo.Direction.FORWARD);
+                wrist.setPower(1);
+            }
+
+            // Close
+            else if(gamepad2.b){
+                wrist.setDirection(CRServo.Direction.REVERSE);
+                wrist.setPower(1);
+            }
+
+            //Stop
+            else {
+                wrist.setPower(0);
             }
         }
     }

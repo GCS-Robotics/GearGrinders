@@ -1,56 +1,76 @@
 package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-@TeleOp(name = "PrimaryDrive")
-public class PrimaryDrive extends LinearOpMode {
+@TeleOp(name = "ArmTest")
+public class ArmTest extends LinearOpMode {
     DcMotor leftFront; //port 0 Gobilda 5202/3/4
     DcMotor leftRear; //port 1 Gobilda 5202/3/4
     DcMotor rightFront; //port 2 Gobilda 5202/3/4
     DcMotor rightRear; //port 3 Gobilda 5202/3/4
     DcMotor arm;
-    Servo wrist;
-    Servo claw;
-
+    CRServo wrist;
+    CRServo claw;
     @Override
     public void runOpMode() throws InterruptedException {
-        // Motor Inits
         leftFront=hardwareMap.dcMotor.get("motor1");
         leftRear=hardwareMap.dcMotor.get("motor2");
         rightFront=hardwareMap.dcMotor.get("motor3");
         rightRear=hardwareMap.dcMotor.get("motor4");
         arm=hardwareMap.dcMotor.get("motor5");
-
-        // Servos
-        wrist=hardwareMap.servo.get("servo1");
-        claw=hardwareMap.servo.get("servo2");
-        // Setting Brake Mode for Motors
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        wrist=hardwareMap.crservo.get("servo1");
+        claw=hardwareMap.crservo.get("servo2");
         waitForStart();
         MecanumDrive drive = new MecanumDrive(leftFront, leftRear, rightFront, rightRear, .7, true, true, false, false);
+        // On Play
         while(opModeIsActive()) {
-            if(gamepad2.left_stick_y > -0.1){
-                arm.setPower(-.5);
-                telemetry.addData("gamepad2",gamepad2.left_stick_y);
-                telemetry.addLine("gamepad2");
-                telemetry.update();
+            if(gamepad2.left_stick_y < -0.1){
+                arm.setPower(1);
             }
-            else if(gamepad2.left_stick_y > 0.2) {
-                arm.setPower(.5);
-                telemetry.addData("gamepad2", gamepad2.left_stick_y);
-                telemetry.addLine("gamepad2");
-                telemetry.update();
-            }else{
+            else if(gamepad2.left_stick_y > 0.1) {
+                arm.setPower(-1);
+            }
+            else{
                 arm.setPower(0);
-                }
+            }
+            if(gamepad2.x){
+                claw.setDirection(CRServo.Direction.FORWARD);
+                claw.setPower(1);
+            }
+
+            // Close
+            else if(gamepad2.y){
+                claw.setDirection(CRServo.Direction.REVERSE);
+                claw.setPower(1);
+            }
+
+            //Stop
+            else {
+                claw.setPower(0);
+            }
+            if(gamepad2.a){
+                wrist.setDirection(CRServo.Direction.FORWARD);
+                wrist.setPower(1);
+            }
+
+            // Close
+            else if(gamepad2.b){
+                wrist.setDirection(CRServo.Direction.REVERSE);
+                wrist.setPower(1);
+            }
+
+            //Stop
+            else {
+                wrist.setPower(0);
+            }
             // DRIVING
             double speed = 1-(gamepad1.right_trigger/1.2);
             if(speed<=0.1){
@@ -105,24 +125,6 @@ public class PrimaryDrive extends LinearOpMode {
             } else { // If the sticks aren't being touched
                 drive.stop();
             }
-            //ARM
-
-
-                // SERVOS
-                if (gamepad2.a) {
-                    wrist.setPosition(.02);
-                }
-                if (gamepad2.b) {
-                    wrist.setPosition(.0);
-                }
-                if (gamepad2.y) {
-                    claw.setPosition(.02);
-                }
-                if (gamepad2.x) {
-                    claw.setPosition(.0);
-                }
-                telemetry.update();
-            }
         }
     }
-
+}
