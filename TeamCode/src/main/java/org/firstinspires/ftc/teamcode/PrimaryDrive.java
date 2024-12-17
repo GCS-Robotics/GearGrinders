@@ -25,7 +25,7 @@ public class PrimaryDrive extends LinearOpMode {
         rightFront=hardwareMap.dcMotor.get("motor3");
         rightRear=hardwareMap.dcMotor.get("motor4");
         arm=hardwareMap.dcMotor.get("motor5");
-        arm=hardwareMap.dcMotor.get("motor6");
+        arm2=hardwareMap.dcMotor.get("motor6");
 
         // Servos
         wrist=hardwareMap.servo.get("servo1");
@@ -38,25 +38,34 @@ public class PrimaryDrive extends LinearOpMode {
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setTargetPosition(0);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm2.setTargetPosition(0);
+        arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(.5);
+        arm2.setPower(.5);
         waitForStart();
         MecanumDrive drive = new MecanumDrive(leftFront, leftRear, rightFront, rightRear, .7, true, true, false, false);
         while(opModeIsActive()) {
-            if(gamepad2.left_stick_y > -0.1){
-                arm.setPower(-.1);
-                arm2.setPower(-.1);
+            if(gamepad2.left_stick_y < -0.2){
+                arm.setTargetPosition(arm.getCurrentPosition()-10);
+                arm2.setTargetPosition(arm.getCurrentPosition()-10);
+                //arm2.setTargetPosition(pos);
                 telemetry.addData("gamepad2",gamepad2.left_stick_y);
                 telemetry.addLine("gamepad2");
                 telemetry.update();
             }
             else if(gamepad2.left_stick_y > 0.2) {
-                arm.setPower(.1);
-                arm2.setPower(.1);
+                arm.setTargetPosition(arm.getCurrentPosition()+10);
+                arm2.setTargetPosition(arm.getCurrentPosition()+10);
                 telemetry.addData("gamepad2", gamepad2.left_stick_y);
                 telemetry.addLine("gamepad2");
                 telemetry.update();
             }else{
-                arm.setPower(0);
+                //arm.setPower(0);
+                //arm2.setPower(0);
                 }
             // DRIVING
             double speed = 1-(gamepad1.right_trigger/1.2);
