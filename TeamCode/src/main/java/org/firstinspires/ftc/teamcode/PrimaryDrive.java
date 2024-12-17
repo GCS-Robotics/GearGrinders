@@ -13,6 +13,7 @@ public class PrimaryDrive extends LinearOpMode {
     DcMotor rightFront; //port 2 Gobilda 5202/3/4
     DcMotor rightRear; //port 3 Gobilda 5202/3/4
     DcMotor arm;
+    DcMotor arm2;
     Servo wrist;
     Servo claw;
 
@@ -24,27 +25,33 @@ public class PrimaryDrive extends LinearOpMode {
         rightFront=hardwareMap.dcMotor.get("motor3");
         rightRear=hardwareMap.dcMotor.get("motor4");
         arm=hardwareMap.dcMotor.get("motor5");
+        arm=hardwareMap.dcMotor.get("motor6");
 
         // Servos
         wrist=hardwareMap.servo.get("servo1");
         claw=hardwareMap.servo.get("servo2");
+
         // Setting Brake Mode for Motors
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         waitForStart();
         MecanumDrive drive = new MecanumDrive(leftFront, leftRear, rightFront, rightRear, .7, true, true, false, false);
         while(opModeIsActive()) {
             if(gamepad2.left_stick_y > -0.1){
-                arm.setPower(-.5);
+                arm.setPower(-.1);
+                arm2.setPower(-.1);
                 telemetry.addData("gamepad2",gamepad2.left_stick_y);
                 telemetry.addLine("gamepad2");
                 telemetry.update();
             }
             else if(gamepad2.left_stick_y > 0.2) {
-                arm.setPower(.5);
+                arm.setPower(.1);
+                arm2.setPower(.1);
                 telemetry.addData("gamepad2", gamepad2.left_stick_y);
                 telemetry.addLine("gamepad2");
                 telemetry.update();
@@ -109,6 +116,7 @@ public class PrimaryDrive extends LinearOpMode {
 
 
                 // SERVOS
+                waitForStart();
                 if (gamepad2.a) {
                     wrist.setPosition(.02);
                 }
@@ -121,6 +129,7 @@ public class PrimaryDrive extends LinearOpMode {
                 if (gamepad2.x) {
                     claw.setPosition(.0);
                 }
+
                 telemetry.update();
             }
         }
