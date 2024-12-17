@@ -44,22 +44,22 @@ public class PrimaryDrive extends LinearOpMode {
         arm2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm2.setTargetPosition(0);
         arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm.setPower(.5);
-        arm2.setPower(.5);
+        arm.setPower(1);
+        arm2.setPower(1);
         waitForStart();
         MecanumDrive drive = new MecanumDrive(leftFront, leftRear, rightFront, rightRear, .7, true, true, false, false);
         while(opModeIsActive()) {
             if(gamepad2.left_stick_y < -0.2){
-                arm.setTargetPosition(arm.getCurrentPosition()-10);
-                arm2.setTargetPosition(arm.getCurrentPosition()-10);
+                arm.setTargetPosition(arm.getCurrentPosition()-19);
+                arm2.setTargetPosition(arm.getCurrentPosition()-19);
                 //arm2.setTargetPosition(pos);
                 telemetry.addData("gamepad2",gamepad2.left_stick_y);
                 telemetry.addLine("gamepad2");
                 telemetry.update();
             }
             else if(gamepad2.left_stick_y > 0.2) {
-                arm.setTargetPosition(arm.getCurrentPosition()+10);
-                arm2.setTargetPosition(arm.getCurrentPosition()+10);
+                arm.setTargetPosition(arm.getCurrentPosition()+12);
+                arm2.setTargetPosition(arm.getCurrentPosition()+12);
                 telemetry.addData("gamepad2", gamepad2.left_stick_y);
                 telemetry.addLine("gamepad2");
                 telemetry.update();
@@ -127,13 +127,13 @@ public class PrimaryDrive extends LinearOpMode {
                 // SERVOS
                 waitForStart();
                 if (gamepad2.a) {
-                    wrist.setPosition(.02);
+                    wrist.setPosition(.01);
                 }
                 if (gamepad2.b) {
                     wrist.setPosition(.0);
                 }
                 if (gamepad2.y) {
-                    claw.setPosition(.02);
+                    claw.setPosition(.01);
                 }
                 if (gamepad2.x) {
                     claw.setPosition(.0);
