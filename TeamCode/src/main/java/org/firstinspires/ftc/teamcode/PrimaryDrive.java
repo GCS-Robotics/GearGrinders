@@ -36,37 +36,32 @@ public class PrimaryDrive extends LinearOpMode {
         leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        arm2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm2.setTargetPosition(0);
         arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm.setPower(1);
-        arm2.setPower(1);
+        arm.setPower(.8);
+        arm2.setPower(.8);
         waitForStart();
         MecanumDrive drive = new MecanumDrive(leftFront, leftRear, rightFront, rightRear, .7, true, true, false, false);
         while(opModeIsActive()) {
-            if(gamepad2.left_stick_y < -0.2){
-                arm.setTargetPosition(arm.getCurrentPosition()-19);
-                arm2.setTargetPosition(arm.getCurrentPosition()-19);
+            if(gamepad2.dpad_down){
+                arm.setTargetPosition(arm.getCurrentPosition()-12);
+                arm2.setTargetPosition(arm.getCurrentPosition()-12);
                 //arm2.setTargetPosition(pos);
                 telemetry.addData("gamepad2",gamepad2.left_stick_y);
                 telemetry.addLine("gamepad2");
                 telemetry.update();
             }
-            else if(gamepad2.left_stick_y > 0.2) {
+            else if(gamepad2.dpad_up) {
                 arm.setTargetPosition(arm.getCurrentPosition()+12);
                 arm2.setTargetPosition(arm.getCurrentPosition()+12);
                 telemetry.addData("gamepad2", gamepad2.left_stick_y);
                 telemetry.addLine("gamepad2");
                 telemetry.update();
-            }else{
-                //arm.setPower(0);
-                //arm2.setPower(0);
-                }
+            }
             // DRIVING
             double speed = 1-(gamepad1.right_trigger/1.2);
             if(speed<=0.1){
@@ -121,22 +116,21 @@ public class PrimaryDrive extends LinearOpMode {
             } else { // If the sticks aren't being touched
                 drive.stop();
             }
-            //ARM
 
 
                 // SERVOS
                 waitForStart();
                 if (gamepad2.a) {
-                    wrist.setPosition(.01);
+                    wrist.setPosition(wrist.getPosition()-.01);
                 }
                 if (gamepad2.b) {
-                    wrist.setPosition(.0);
+                    wrist.setPosition(wrist.getPosition()+.01);
                 }
-                if (gamepad2.y) {
-                    claw.setPosition(.01);
+                if(gamepad2.y){
+                    claw.setPosition(claw.getPosition()-.01);
                 }
-                if (gamepad2.x) {
-                    claw.setPosition(.0);
+                if(gamepad2.x){
+                    claw.setPosition(claw.getPosition()+.01);
                 }
 
                 telemetry.update();
